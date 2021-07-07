@@ -1,4 +1,4 @@
-package com.wellsfargo.SpringBootDataJpa;
+package com.wellsfargo.springbootdatajpa;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -6,5 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 class SpringBootDataJpaApplicationTests {
 
-
+	@Test
+	void contextLoads() {
+	}
 }

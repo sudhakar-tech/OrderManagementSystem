@@ -27,7 +27,7 @@ public class UserController {
 		if (users == null) {
 			throw new RecordNotFoundException("users is not creted : " + users);
 		}
-		return new ResponseEntity<User>(users, HttpStatus.OK);
+		return new ResponseEntity<>(users, HttpStatus.OK);
 	}
 
 	@GetMapping("/getUsers")

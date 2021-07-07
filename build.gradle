@@ -23,9 +23,18 @@ dependencies {
 	compileOnly 'mysql:mysql-connector-java:8.0.13'
 	implementation('io.jsonwebtoken:jjwt:0.9.1')
 	//compile('org.apache.tomcat.embed:tomcat-embed-jasper:8.0.47')
-	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+	//https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '1.2.0.RELEASE'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation "org.mockito:mockito-core:2.24.0"
+    testImplementation ("org.springframework.boot:spring-boot-starter-test") {
+        exclude group: "org.mockito", module: "mockito-all"
+    }
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.2.0')
+    testImplementation('org.junit.jupiter:junit-jupiter-params:5.2.0')
+    runtimeOnly('org.junit.jupiter:junit-jupiter-engine:5.2.0')
+    testImplementation "org.mockito:mockito-core:2.+"
+    testImplementation('org.mockito:mockito-junit-jupiter:2.18.3')
 }
 
 test {

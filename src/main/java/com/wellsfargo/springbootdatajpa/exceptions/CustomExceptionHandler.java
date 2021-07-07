@@ -15,11 +15,14 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @SuppressWarnings({ "unchecked", "rawtypes" })
 @ControllerAdvice
 public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
+	
+	ErrorResponse error;
+	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<Object> handleAllExceptions(Exception ex, WebRequest request) {
 		List<String> details = new ArrayList<>();
 		details.add(ex.getLocalizedMessage());
-		ErrorResponse error = new ErrorResponse("Server Error", details);
+		error = new ErrorResponse("Server Error", details);
 		return new ResponseEntity(error, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -27,7 +30,7 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	public final ResponseEntity<Object> handleUserNotFoundException(RecordNotFoundException ex, WebRequest request) {
 		List<String> details = new ArrayList<>();
 		details.add(ex.getLocalizedMessage());
-		ErrorResponse error = new ErrorResponse("Record Not Found", details);
+		error = new ErrorResponse("Record Not Found", details);
 		return new ResponseEntity(error, HttpStatus.NOT_FOUND);
 	}
 
@@ -35,10 +38,10 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			org.springframework.http.HttpHeaders headers, HttpStatus status, WebRequest request) {
 		List<String> details = new ArrayList<>();
-		for (ObjectError error : ex.getBindingResult().getAllErrors()) {
-			details.add(error.getDefaultMessage());
+		for (ObjectError objectError : ex.getBindingResult().getAllErrors()) {
+			details.add(objectError.getDefaultMessage());
 		}
-		ErrorResponse error = new ErrorResponse("Validation Failed", details);
+		error = new ErrorResponse("Validation Failed", details);
 		return new ResponseEntity(error, HttpStatus.BAD_REQUEST);
 	}
 }

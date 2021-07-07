@@ -14,7 +14,7 @@ import com.wellsfargo.springbootdatajpa.service.EmailSenderServiceImpl;
 public class SpringBootDataJpaApplication {
 	
 	@Autowired
-	private EmailSenderServiceImpl emailSenderServiceImpl; 
+	private EmailSenderServiceImpl emailSenderServiceImpl;
 
 	@EventListener(ApplicationReadyEvent.class)
 	public void triggerMail() {

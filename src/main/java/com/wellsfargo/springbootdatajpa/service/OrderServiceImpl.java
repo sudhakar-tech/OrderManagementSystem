@@ -9,6 +9,8 @@ import com.wellsfargo.springbootdatajpa.model.Order;
 import com.wellsfargo.springbootdatajpa.model.User;
 import com.wellsfargo.springbootdatajpa.repository.OrderRepository;
 
+import lombok.var;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -26,27 +28,26 @@ public class OrderServiceImpl implements OrderService {
 	}
 	
 	public List<Order> findOrderByUser(User user){
-		return (List<Order>) orderRepository.getOrderByUser(user.getUid());
+		return orderRepository.getOrderByUser(user.getUid());
 	}
 	 
 	@Override
 	public Order findByOrderId(int orderId) {
 		return orderRepository.findById(orderId).get();
 	}
-
+	
+	Order deletedOrder;
 	@Override
-    public Order updateOrder(Order order){
-        Order oldOrder = orderRepository.findById(order.getOid()).orElse(null);
-        oldOrder.setOrderName(order.getOrderName());
-        oldOrder.setQty(order.getQty());
-        oldOrder.setPrice(order.getPrice());
-        oldOrder.setUser(order.getUser());
+    public Order updateOrder(Order newOrder,Order oldOrder){
+		oldOrder.setOrderName(newOrder.getOrderName());
+		oldOrder.setPrice(newOrder.getPrice());
+        oldOrder.setQty(newOrder.getQty());
+        //oldOrder.setUser(newOrder.getUser());
         return orderRepository.save(oldOrder);
     }
 	
 	@Override
 	public Order deleteOrder(int orderId) throws Exception {
-		Order deletedOrder = null;
 		try {
 			deletedOrder = orderRepository.findById(orderId).orElse(null);
 			if (deletedOrder == null) {
