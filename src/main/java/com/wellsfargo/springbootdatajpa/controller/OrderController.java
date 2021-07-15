@@ -36,9 +36,13 @@ public class OrderController {
 	
 	
 	@PostMapping("/addOrder")
-	public ResponseEntity<Order> addOrder(@RequestBody Order order, HttpServletRequest request) {
-		String userName = (String) request.getSession().getAttribute("user");
-		User user = userServiceImpl.findByUserName(userName);
+	public ResponseEntity<Order> addOrder(@RequestBody Order order, HttpServletRequest request,@RequestHeader HttpHeaders headers) {
+		//String userName = (String) request.getSession().getAttribute("user");
+		String userName = null;
+		if (headers.containsKey("username"))
+			userName = headers.get("username").get(0);
+		User user = userServiceImpl.findByUserName(userName); 
+		
 		if (user != null) {
 			order.setUser(user);
 			order = orderServiceImpl.addOrder(order);
@@ -52,7 +56,15 @@ public class OrderController {
 	}
 
 	@PutMapping("/updateOrder/{orderId}")
-	public ResponseEntity<Order> updateOrder(@RequestBody Order orderRequest,HttpServletRequest request) {
+	public ResponseEntity<Order> updateOrder(@PathVariable("orderId") int orderId, @RequestBody Order orderRequest, HttpServletRequest request,@RequestHeader HttpHeaders headers) {
+		String userName = null;
+		if (headers.containsKey("username"))
+			userName = headers.get("username").get(0);
+		User user = userServiceImpl.findByUserName(userName);
+		if (user != null) {
+			orderRequest.setUser(user);
+			orderRequest.setOid(orderId);
+		}
 		Order oldOrders = orderServiceImpl.findByOrderId(orderRequest.getOid());
 			if (oldOrders.getOid() == 0) {
 				throw new RecordNotFoundException("Invalid order id : " + orderRequest.getOid());
@@ -63,8 +75,11 @@ public class OrderController {
 	}
 
 	@GetMapping("/getOrdersById/{id}")
-	public ResponseEntity<Order> getOrdersById(@PathVariable("id") int orderId, HttpServletRequest request) {
-		String userName = (String) request.getSession().getAttribute("user");
+	public ResponseEntity<Order> getOrdersById(@PathVariable("id") int orderId, HttpServletRequest request, @RequestHeader HttpHeaders headers) {
+		//String userName = (String) request.getSession().getAttribute("user");
+		String userName = null;
+		if (headers.containsKey("username"))
+			userName = headers.get("username").get(0);
 		User user = userServiceImpl.findByUserName(userName);
 		Order orders = orderServiceImpl.findByOrderId(orderId);
 		if (user.getUserName() == null) {
@@ -103,12 +118,16 @@ public class OrderController {
 
 
 	@DeleteMapping("/delete/{orderId}")
-	public ResponseEntity<Order> deleteOrder(@PathVariable("orderId") int orderId) throws Exception {
+	public ResponseEntity<Order> deleteOrder(@PathVariable("orderId") int orderId,@RequestHeader HttpHeaders headers) throws Exception {
+		String userName = null;
+		if (headers.containsKey("username"))
+			userName = headers.get("username").get(0);
+		User user = userServiceImpl.findByUserName(userName);
 		Order orders = orderServiceImpl.findByOrderId(orderId);
 		if (orders.getOid() == 0) {
 			throw new RecordNotFoundException("Invalid order id : " + orderId);
 		} else {
-			orderServiceImpl.deleteOrder(orders.getOid());
+			orderServiceImpl.deleteOrder(orderId);
 		}
 		return new ResponseEntity<>(HttpStatus.OK);
 	}

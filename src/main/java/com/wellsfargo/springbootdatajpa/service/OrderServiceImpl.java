@@ -9,8 +9,6 @@ import com.wellsfargo.springbootdatajpa.model.Order;
 import com.wellsfargo.springbootdatajpa.model.User;
 import com.wellsfargo.springbootdatajpa.repository.OrderRepository;
 
-import lombok.var;
-
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -53,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
 			if (deletedOrder == null) {
 				throw new Exception("order id is not available");
 			} else {
-				orderRepository.deleteById(orderId);
+				orderRepository.deleteOrderById(orderId);
 			}
 		} catch (Exception ex) {
 			throw ex;

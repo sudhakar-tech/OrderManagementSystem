@@ -42,7 +42,7 @@ public class User {
 	private String password;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "user", cascade={CascadeType.ALL})
+	@OneToMany(mappedBy = "user", cascade={CascadeType.ALL}, orphanRemoval = true)
 	private List<Order> orders;
 	 
 	 
